@@ -93,7 +93,7 @@ export default function SignInForm() {
             </div>
 
             {/* Opsi 'Remember me' dan 'Forgot password' */}
-            <div className="flex justify-between w-full py-4 -mt-5">
+            <div className="flex justify-end w-full py-4 -mt-5">
               
               <Link href="/forgot-password" className="font-bold text-md">
                 Forgot password
