@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
+import Link from 'next/link'
 
 interface Profile {
   id: string
@@ -159,11 +160,27 @@ export default function Page() {
             />
           </div>
 
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
+              Password
+              <div className="flex justify-end w-full py-4 -mt-5">
+              
+              <Link href="/forgot-password" className="font-bold text-md">
+                Lupa Password
+              </Link>
+            </div>
+            </label>
+            
+          </div>
+
           <button
             type="submit"
             className="w-full bg-pink-500 text-white py-2 rounded-md font-semibold hover:bg-pink-600 transition"
           >
-            Simpan Display Name
+            Simpan
           </button>
 
           <button

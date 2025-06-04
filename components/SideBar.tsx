@@ -60,6 +60,11 @@ const SideBar = () => {
         })}
       </ul>
 
+        <div>
+          <Link href={'/'}>
+          <button className='bg-black px-5 py-2 text-white rounded-xl mb-8 hover:bg-gray-800 hover:cursor-pointer'>HomePage</button>
+          </Link>
+        </div>
       {/* Tombol logout */}
       <div className="flex justify-center w-full">
         <button

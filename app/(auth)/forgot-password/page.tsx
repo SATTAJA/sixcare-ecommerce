@@ -3,11 +3,14 @@
 import { useState } from 'react'
 import { supabase } from '../../../lib/supabaseClient'
 import Link from 'next/link'
+import { ChevronLeft } from 'lucide-react'
+import { useRouter } from 'next/navigation'
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const router = useRouter()
 
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,9 +67,9 @@ export default function ForgotPassword() {
         )}
 
         <div className="mt-6 text-sm text-gray-500">
-          <Link href="/sign-in" className="hover:underline">
-            Back to Sign In
-          </Link>
+          <button onClick={() => router.back()} className="flex items-center gap-1 mt-5 mb-5 hover:cursor-pointer">
+        <ChevronLeft size={15} /> Kembali
+      </button>
         </div>
       </form>
     </main>
