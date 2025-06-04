@@ -16,7 +16,7 @@ type Product = {
   bpom_number: string;
   image_url: string;
   stock: number;
-  brand: { name: string } | null;
+  brand: { name: string }[] | null;  // ✅ Ubah menjadi array
   category_name: string | null;
 };
 
@@ -65,7 +65,7 @@ const Page = () => {
         .eq("id", productId)
         .single();
 
-      if (data) setProduct(data);
+      if (data) setProduct(data as Product);
       if (error) console.error("Gagal mengambil produk:", error);
       setLoading(false);
     };
@@ -98,7 +98,7 @@ const Page = () => {
             />
             <div className="mt-5 md:mt-0 flex-1">
               <p className="font-semibold text-3xl md:text-4xl mb-2">
-                {product.brand?.name ?? "Tanpa Brand"}
+                {product.brand?.[0]?.name ?? "Tanpa Brand"} {/* ✅ akses index pertama */}
               </p>
               <p className="text-lg">{product.name}</p>
               <p className="text-sm font-extralight mb-2">
@@ -185,8 +185,7 @@ const Page = () => {
                     ];
 
                     localStorage.setItem("buyNowItems", JSON.stringify(buyNowItem));
-
-                    await new Promise((resolve) => setTimeout(resolve, 100)); // penting agar data tersimpan dulu
+                    await new Promise((resolve) => setTimeout(resolve, 100));
                     router.push("/checkout");
                   }}
                   className="bg-pink-400 px-6 py-2 rounded text-white hover:bg-pink-500 transition-all duration-300 font-semibold"
