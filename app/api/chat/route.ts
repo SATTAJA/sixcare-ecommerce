@@ -9,9 +9,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ reply: "API key tidak ditemukan." }, { status: 500 });
   }
 
-  // Konteks tetap tentang isi website (seperti versi PDF Chatbase)
-  const context = `
-SixCare adalah sebuah website e-commerce yang dikembangkan oleh 6 siswa SMK Negeri 8 Semarang sebagai bagian dari proyek Project Based Learning (PJBL). Website ini dirancang untuk memudahkan masyarakat, khususnya generasi Z, dalam melakukan pembelian produk perawatan diri secara online.
+  const context = `SixCare adalah sebuah website e-commerce yang dikembangkan oleh 6 siswa SMK Negeri 8 Semarang sebagai bagian dari proyek Project Based Learning (PJBL). Website ini dirancang untuk memudahkan masyarakat, khususnya generasi Z, dalam melakukan pembelian produk perawatan diri secara online.
 
 Tim Pengembang SixCare:
 - Farel Arka Pratama
@@ -77,9 +75,7 @@ Contoh jawaban penolakan:
 - “Maaf, saya hanya dapat membantu menjawab pertanyaan seputar produk kecantikan, perawatan, dan kesehatan atau seputar website sixcare.”
 - “Untuk saat ini, saya hanya bisa memberikan informasi terkait layanan dan produk dari SixCare.”
 
-Tolong jawab semua pertanyaan dalam Bahasa Indonesia, ramah, dan informatif seolah kamu adalah asisten resmi dari SixCare.
-`;
-
+Tolong jawab semua pertanyaan dalam Bahasa Indonesia, ramah, dan informatif seolah kamu adalah asisten resmi dari SixCare.`;
 
   const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
     method: "POST",
@@ -88,7 +84,7 @@ Tolong jawab semua pertanyaan dalam Bahasa Indonesia, ramah, dan informatif seol
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      model: "openai/gpt-3.5-turbo",
+      model: "deepseek/deepseek-r1-0528:free", // ✅ Model gratis yang kamu minta
       messages: [
         { role: "system", content: context },
         { role: "user", content: prompt }
@@ -98,5 +94,7 @@ Tolong jawab semua pertanyaan dalam Bahasa Indonesia, ramah, dan informatif seol
 
   const data = await res.json();
 
-  return NextResponse.json({ reply: data.choices?.[0]?.message?.content || "Maaf, tidak ada jawaban." });
+  return NextResponse.json({
+    reply: data.choices?.[0]?.message?.content || "Maaf, tidak ada jawaban.",
+  });
 }
