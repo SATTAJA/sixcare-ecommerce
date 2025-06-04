@@ -75,12 +75,14 @@ export default function Page() {
     const { error: updateError } = await supabase
       .from('profiles')
       .upsert(
-        {
-          id: profile.id,
-          email: profile.email,
-          role: profile.role,
-          display_name: newDisplayName,
-        },
+        [
+          {
+            id: profile.id,
+            email: profile.email,
+            role: profile.role,
+            display_name: newDisplayName,
+          },
+        ],
         { onConflict: ['id'] }
       )
 
@@ -114,7 +116,6 @@ export default function Page() {
       <h1 className="text-3xl font-extrabold text-center mb-8 text-gray-800">
         Pengaturan Profil
       </h1>
-
 
       {profile ? (
         <form
