@@ -149,9 +149,9 @@ export async function POST(req: NextRequest) {
             },
           },
           callbacks: {
-            finish: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/success`,
-            unfinish: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/failed`,
-            error: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/error`,
+            finish: `${process.env.NEXT_PUBLIC_BASE_URL}/orders`,
+            unfinish: `${process.env.NEXT_PUBLIC_BASE_URL}/orders`,
+            error: `${process.env.NEXT_PUBLIC_BASE_URL}/orders`,
           },
         }),
       }
