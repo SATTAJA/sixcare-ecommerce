@@ -41,8 +41,12 @@ export default function CartPage() {
       .eq('user_id', user.id)
 
     if (data) {
-      setItems(data)
-      setSelectedIds(data.map(item => item.id))
+      const normalizedData = data.map(item => ({
+        ...item,
+        product: Array.isArray(item.product) ? item.product[0] : item.product
+      }))
+      setItems(normalizedData)
+      setSelectedIds(normalizedData.map(item => item.id))
     }
 
     setLoading(false)
