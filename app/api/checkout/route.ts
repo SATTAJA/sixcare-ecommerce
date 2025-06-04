@@ -76,6 +76,7 @@ export async function POST(req: NextRequest) {
 
     const order_id = uuidv4();
 
+    // Buat transaksi dengan status "Menunggu Pembayaran"
     const { data: insertedTransaction, error: insertError } = await supabase
       .from("transactions")
       .insert({
@@ -86,7 +87,7 @@ export async function POST(req: NextRequest) {
         email,
         address,
         total: gross_amount,
-        status: "Sedang Dikemas",
+        status: "Menunggu Pembayaran",
       })
       .select()
       .single();
@@ -112,40 +113,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Gagal menyimpan detail item transaksi." }, { status: 500 });
     }
 
-    for (const item of items) {
-      const newStock = item.product.stock - item.quantity;
-      if (newStock < 0) {
-        return NextResponse.json(
-          { error: `Stok tidak cukup untuk produk ${item.product.name}` },
-          { status: 400 }
-        );
-      }
+    // Jangan update stok dan jangan hapus keranjang di sini!
+    // Nanti dilakukan di webhook Midtrans.
 
-      const { error: stockError } = await supabase
-        .from("products")
-        .update({ stock: newStock })
-        .eq("id", item.product.id);
-
-      if (stockError) {
-        return NextResponse.json({ error: "Gagal mengurangi stok." }, { status: 500 });
-      }
-    }
-
-    if (!buyNowItems && selectedIds.length > 0) {
-      const { error: deleteError } = await supabase
-        .from("cart_items")
-        .delete()
-        .in("id", selectedIds);
-
-      if (deleteError) {
-        return NextResponse.json({ error: "Gagal menghapus keranjang." }, { status: 500 });
-      }
-    }
-
-    // Midtrans Payload
+    // Payload Midtrans
     const item_details = items.map((item) => ({
       id: item.product.id,
-      name: item.product.name.substring(0, 50), // Midtrans max 50 char
+      name: item.product.name.substring(0, 50),
       price: item.product.price,
       quantity: item.quantity,
     }));

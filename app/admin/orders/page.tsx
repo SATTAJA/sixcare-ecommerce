@@ -100,9 +100,10 @@ export default function AdminOrdersPage() {
     }
   }
 
+  // Filter orders: jika filter 'Semua', sembunyikan status 'Menunggu Pembayaran'
   const filteredOrders =
     statusFilter === 'Semua'
-      ? orders
+      ? orders.filter(order => order.status !== 'Menunggu Pembayaran')
       : orders.filter(order => order.status === statusFilter)
 
   const exportToExcel = () => {
@@ -177,6 +178,7 @@ export default function AdminOrdersPage() {
                 value={order.status}
                 onChange={(e) => updateStatus(order.id, e.target.value)}
                 className="border border-gray-400 px-2 py-1 rounded"
+                disabled={order.status === 'Belum Dibayar'}
               >
                 <option value="Sedang Dikemas">Sedang Dikemas</option>
                 <option value="Sedang Dikirim">Sedang Dikirim</option>
