@@ -83,7 +83,7 @@ export default function Page() {
             display_name: newDisplayName,
           },
         ],
-        { onConflict: ['id'] }
+        { onConflict: 'id' }
       )
 
     if (updateError) {
