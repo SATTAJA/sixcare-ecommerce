@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
       }
 
       items = cartItems.map((item) => ({
-        product: item.product,
+        // Pastikan `product` adalah objek produk, bukan array
+        product: item.product as { id: string; name: string; price: number; stock: number },
         quantity: item.quantity,
       }));
     }
