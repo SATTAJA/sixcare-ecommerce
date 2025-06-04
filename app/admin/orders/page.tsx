@@ -3,8 +3,36 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabaseClient'
 import * as XLSX from 'xlsx'
 
+// Definisikan interface untuk item transaksi dan produk
+interface Product {
+  id: number
+  name: string
+  image_url: string
+  category_name: string
+}
+
+interface TransactionItem {
+  id: number
+  transaction_id: number
+  product_id: number
+  quantity: number
+  price: number
+  product?: Product
+}
+
+interface Order {
+  id: number
+  created_at: string
+  full_name: string
+  email: string
+  address: string
+  status: string
+  total: number
+  transaction_items: TransactionItem[]
+}
+
 export default function AdminOrdersPage() {
-  const [orders, setOrders] = useState<any[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [loading, setLoading] = useState(true)
   const [statusFilter, setStatusFilter] = useState('Semua')
 
@@ -79,7 +107,7 @@ export default function AdminOrdersPage() {
 
   const exportToExcel = () => {
     const dataToExport = filteredOrders.flatMap(order =>
-      order.transaction_items.map(item => ({
+      order.transaction_items.map((item: TransactionItem) => ({
         ID_Pesanan: order.id,
         Tanggal: new Date(order.created_at).toLocaleDateString('id-ID'),
         Nama_Pemesan: order.full_name,
@@ -167,7 +195,7 @@ export default function AdminOrdersPage() {
 
           {/* Daftar Produk */}
           <div className="divide-y">
-            {order.transaction_items.map((item: any) => (
+            {order.transaction_items.map((item: TransactionItem) => (
               <div key={item.id} className="flex items-center gap-4 py-3">
                 <img
                   src={item.product?.image_url}
