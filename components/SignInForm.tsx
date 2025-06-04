@@ -94,10 +94,7 @@ export default function SignInForm() {
 
             {/* Opsi 'Remember me' dan 'Forgot password' */}
             <div className="flex justify-between w-full py-4 -mt-5">
-              <div className="mr-24">
-                <input type="checkbox" id="ch" name="ch" className="mr-2" />
-                <span className="text-md">Remember for 30 days</span>
-              </div>
+              
               <Link href="/forgot-password" className="font-bold text-md">
                 Forgot password
               </Link>
