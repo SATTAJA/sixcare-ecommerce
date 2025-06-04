@@ -5,6 +5,20 @@ import { supabase } from '@/lib/supabaseClient'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft } from 'lucide-react'
 
+// Tambahkan deklarasi global untuk Snap.js
+declare global {
+  interface Window {
+    snap: {
+      pay: (token: string, options: {
+        onSuccess?: () => void
+        onPending?: () => void
+        onError?: (error: any) => void
+        onClose?: () => void
+      }) => void
+    }
+  }
+}
+
 export default function CheckoutPage() {
   const [user, setUser] = useState<any>(null)
   const [displayName, setDisplayName] = useState('')
@@ -32,21 +46,18 @@ export default function CheckoutPage() {
       }
     }
 
-    // Ambil selectedIds dari localStorage
     const savedSelected = localStorage.getItem("selectedCartIds")
     if (savedSelected) {
       setSelectedIds(JSON.parse(savedSelected))
     }
 
-    // Ambil buyNowItems dari localStorage
     const savedBuyNow = localStorage.getItem("buyNowItems")
     if (savedBuyNow) {
       setBuyNowItems(JSON.parse(savedBuyNow))
     }
 
-    // Load Snap.js Midtrans
     const clientKey = process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ?? ''
-    if (clientKey) {
+    if (clientKey && typeof window !== 'undefined') {
       const script = document.createElement('script')
       script.src = 'https://app.sandbox.midtrans.com/snap/snap.js'
       script.setAttribute('data-client-key', clientKey)
@@ -91,8 +102,8 @@ export default function CheckoutPage() {
         throw new Error(data?.error || "Gagal memproses transaksi.")
       }
 
-      // Panggil Snap.js
-      if (window.snap && typeof window.snap.pay === 'function') {
+      // Panggil Snap.js Midtrans
+      if (typeof window !== 'undefined' && window.snap && typeof window.snap.pay === 'function') {
         window.snap.pay(data.token, {
           onSuccess: () => {
             localStorage.removeItem("selectedCartIds")
@@ -122,8 +133,8 @@ export default function CheckoutPage() {
   return (
     <div className="max-w-md mx-auto p-4">
       <button onClick={() => router.back()} className="flex items-center gap-1 mt-5 mb-5 hover:cursor-pointer">
-              <ChevronLeft size={15} /> Kembali
-            </button>
+        <ChevronLeft size={15} /> Kembali
+      </button>
       <h2 className="text-xl font-bold mb-4">Isi Data Diri</h2>
       <form className="space-y-3" onSubmit={(e) => { e.preventDefault(); handlePay(); }}>
         <input
