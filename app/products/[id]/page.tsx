@@ -97,7 +97,9 @@ const Page = () => {
               className="h-full md:h-120 aspect-square object-cover"
             />
             <div className="mt-5 md:mt-0 flex-1">
-              
+              <p className="font-semibold text-3xl md:text-4xl mb-2">
+                {product.brand?.[0]?.name ?? "Tanpa Brand"} {/* ✅ akses index pertama */}
+              </p>
               <p className="text-lg">{product.name}</p>
               <p className="text-sm font-extralight mb-2">
                 No BPOM: {product.bpom_number}
